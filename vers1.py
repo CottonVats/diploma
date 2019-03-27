@@ -45,7 +45,6 @@ class VK_user:
         self.groups_dicts = requests.get('https://api.vk.com/method/groups.get', self.new_params1)
         self.all_groups = self.groups_dicts.json()['response']['items']
         for group in self.all_groups:
-            print(group)
             group_dict = {'gid': group['id'],
                           'name': group['name'],
                           'members_count': group['members_count']
