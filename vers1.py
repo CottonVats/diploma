@@ -12,7 +12,7 @@ auth_params = {
     'v': 5.92
 }
 print("?".join((oauth_url, urlencode(auth_params))))
-token1 = "6cce3f3c00860bbd32b8f8271cd083184c0c092dafcd6f35d2edc26a3ffec55396301ba6f7a7999631427"
+token1 = "821d8ff0443b81f2e4ac06c63aec707e53126f151e9001db3bfe30bebb7668762b74237dec3aa33c28980"
 class VK_user:
     def __init__(self, token):
         self.params_list = []
@@ -41,10 +41,11 @@ class VK_user:
             'v': 5.98,
             'id': givenid,
             'extended': 1,
-            'fields': ['members_count']}
+            'fields': 'members_count'}
         self.groups_dicts = requests.get('https://api.vk.com/method/groups.get', self.new_params1)
         self.all_groups = self.groups_dicts.json()['response']['items']
         for group in self.all_groups:
+            print(group)
             group_dict = {'gid': group['id'],
                           'name': group['name'],
                           'members_count': group['members_count']
