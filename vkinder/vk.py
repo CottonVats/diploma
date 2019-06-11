@@ -1,18 +1,34 @@
 import vk
-
+import json
+from vkinder.field_adapters import get_cityname, split_string
 
 APP_ID = 6994905
 VERSION = 5.95
 FEMALE = 1
 MALE = 2
-TOKEN = "4bbe1f18729bbc853fd9704833d791e0cb5278d0bdbbaa71aee37cf7edc1c4a1ecb28d2ec0f1e0479df0a"
+with open('token.json', 'r') as tokenfile:
+    TOKEN = json.load(tokenfile)['token']
 
 
-def search(login, password, fields, age_min, age_max, sex) -> list:
-    session = vk.AuthSession(app_id=APP_ID,
-                             user_login=login,
-                             user_password=password
-                             )
+def get_user_info():
+    session = vk.Session(access_token=TOKEN)
+    vkapi = vk.API(session)
+    info = vkapi.users.get(fields='city, books, movies, interests, sex', v=VERSION)[0]
+    user_city = get_cityname(info['city'])
+    user_books = split_string(info['books'])
+    user_movies = split_string(info['movies'])
+    user_interests = split_string(info['interests'])
+    if info['sex'] == FEMALE:
+        needed_sex = MALE
+    elif info['sex'] == MALE:
+        needed_sex = FEMALE
+    return user_city, user_books, user_movies, user_interests, needed_sex
+
+
+
+
+def search(fields, age_min, age_max, sex) -> list:
+    session = vk.Session(access_token=TOKEN)
 
     vkapi = vk.API(session)
 
@@ -23,16 +39,11 @@ def search(login, password, fields, age_min, age_max, sex) -> list:
         age_from=age_min,
         fields=','.join(fields),
         age_to=age_max,
-        access_token=TOKEN
     )['items']
 
 
-def get_photos(login, password, owner_id) -> list:
-    session = vk.AuthSession(app_id=APP_ID,
-                             user_login=login,
-                             user_password=password,
-                             access_token=TOKEN
-                             )
+def get_photos(owner_id) -> list:
+    session = vk.Session(access_token=TOKEN)
 
     vkapi = vk.API(session)
 
@@ -42,7 +53,6 @@ def get_photos(login, password, owner_id) -> list:
         album_id='profile',
         extended=1,
         owner_id=owner_id,
-        access_token=TOKEN
     )['items']
 
     return photos_response

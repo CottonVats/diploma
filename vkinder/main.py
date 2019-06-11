@@ -73,7 +73,7 @@ def sort_data(data):
     user_list = []
     for user in sort_by_weight.keys():
         user_list.append(user)
-    top_10_list = user_list[0:10]
+    top_10_list = user_list[0:9]
 
     print(top_10_list)
 

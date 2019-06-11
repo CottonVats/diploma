@@ -1,29 +1,31 @@
 from vkinder.params_for_search import SearchParams, StringField, ListField
-from vkinder.vk import search, MALE, get_photos
+from vkinder.vk import search, get_photos, get_user_info, TOKEN
 from vkinder.main import data_process, sort_data
 import time
 
+if __name__ == '__main__':
+    get_user_info()
+
 
 def _main():
-    vk_login = ''
-    vk_pw = ''
-    age_min = 20
-    age_max = 40
-
+    age_min = int(input("Минимальный возраст: "))
+    age_max = int(input("Максимальный возраст: "))
+    city_weight = int(input("Вес (число от 1 до 10) совпадения по городу: "))
+    books_weight = int(input("Вес (число от 1 до 10) совпадения по любимым книгам: "))
+    movies_weight = int(input("Вес (число от 1 до 10) совпадения по любимым фильмам: "))
+    interests_weight = int(input("Вес (число от 1 до 10) совпадения по интересам: "))
     params = SearchParams([
-        StringField(name='city', value='Москва', weight=50),
-        ListField(name='books', value=['Кинг'], weight=100),
-        ListField(name='movies', value=['Гарри Поттер'], weight=200),
-        ListField(name='interests', value=['музыка'], weight=150),
+        StringField(name='city', value=user_city, weight=city_weight),
+        ListField(name='books', value=user_books, weight=books_weight),
+        ListField(name='movies', value=user_movies, weight=movies_weight),
+        ListField(name='interests', value=user_interests, weight=interests_weight),
     ])
 
     candidates = search(
-        login=vk_login,
-        password=vk_pw,
         fields=list(params.registry),
         age_min=age_min,
         age_max=age_max,
-        sex=MALE,
+        sex=needed_sex,
     )
 
     top_10_candidates = data_process(search_params=params, candidates=candidates)
@@ -33,8 +35,6 @@ def _main():
     for candidate in sorted_top_10:
         time.sleep(0.5)
         photos = get_photos(
-            login=vk_login,
-            password=vk_pw,
             owner_id=candidate,
         )
         photos_dict = dict()
