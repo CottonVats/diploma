@@ -6,7 +6,7 @@ APP_ID = 6994905
 VERSION = 5.95
 FEMALE = 1
 MALE = 2
-with open('token.json', 'r') as tokenfile:
+with open('vkinder/token.json', 'r') as tokenfile:
     TOKEN = json.load(tokenfile)['token']
 
 

@@ -4,16 +4,21 @@ from vkinder.main import data_process, sort_data
 import time
 
 if __name__ == '__main__':
-    get_user_info()
+    params = get_user_info()
+    user_city = params[0]
+    user_books = params[1]
+    user_movies = params[2]
+    user_interests = params[3]
+    needed_sex = params[4]
 
 
 def _main():
     age_min = int(input("Минимальный возраст: "))
     age_max = int(input("Максимальный возраст: "))
-    city_weight = int(input("Вес (число от 1 до 10) совпадения по городу: "))
-    books_weight = int(input("Вес (число от 1 до 10) совпадения по любимым книгам: "))
-    movies_weight = int(input("Вес (число от 1 до 10) совпадения по любимым фильмам: "))
-    interests_weight = int(input("Вес (число от 1 до 10) совпадения по интересам: "))
+    city_weight = int(input("Вес (число от 0 до 10) совпадения по городу: "))
+    books_weight = int(input("Вес (число от 0 до 10) совпадения по любимым книгам: "))
+    movies_weight = int(input("Вес (число от 0 до 10) совпадения по любимым фильмам: "))
+    interests_weight = int(input("Вес (число от 0 до 10) совпадения по интересам: "))
     params = SearchParams([
         StringField(name='city', value=user_city, weight=city_weight),
         ListField(name='books', value=user_books, weight=books_weight),
@@ -33,7 +38,7 @@ def _main():
     sorted_top_10 = list(sorted_result)[0:10]
 
     for candidate in sorted_top_10:
-        time.sleep(0.5)
+        time.sleep(0.3)
         photos = get_photos(
             owner_id=candidate,
         )
