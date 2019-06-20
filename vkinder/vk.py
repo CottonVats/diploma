@@ -14,10 +14,10 @@ def get_user_info():
     session = vk.Session(access_token=TOKEN)
     vkapi = vk.API(session)
     info = vkapi.users.get(fields='city, books, movies, interests, sex', v=VERSION)[0]
-    user_city = get_cityname(info['city'])
-    user_books = split_string(info['books'])
-    user_movies = split_string(info['movies'])
-    user_interests = split_string(info['interests'])
+    user_city = get_cityname(info.get('city', {"id":0, "title":'Не указан'}))
+    user_books = split_string(info.get('books'))
+    user_movies = split_string(info.get('movies'))
+    user_interests = split_string(info.get('interests'))
     if info['sex'] == FEMALE:
         needed_sex = MALE
     elif info['sex'] == MALE:
